@@ -695,34 +695,5 @@ def select_experience_type():
 run_chatbot()
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### STEP 4: Create the embeddings and the vector table from the winery_information single string table
-* Position your cursor anywhere in the second transformation script in your Snowflake Snowsight worksheet and click run
-* This will create your embeddings and a vector table that will be referenced later by Cortex LLM functions and your Streamlit application
-
-### STEP 5: Run a SELECT statement to check out the LLM-friendly "text" document table and embeddings table
-* Position your cursor anywhere in the third script **SELECT * FROM vineyard_data_vectors WHERE winery_information LIKE '%winery name is Kohlleffel Vineyards%';** in your Snowflake Snowsight worksheet and click run
-* This will show you the complete results of the 2 transformations that you just ran
-
-### STEP 6: Create the a Streamlit app and build a Visit Assistant Chatbot
-* Open a New Streamlit application in Snowflake Snowflake (left gray navigation under Projects)
-* Highlight the "hello world" Streamlit code and delete it
-* Click Run to clear the preview pane
-* Copy and paste the [**Streamlit code**](02-streamlit-code.py) in the Streamlit editor
-
-### Step 7: Have some fun checking out the travel assistant features and creating prompts for unique visits using RAG
-* Test the streamlit application with your own prompts or check out the sample prompts in the lab guide
-
+### Step 6: Have some fun checking out the travel assistant features and creating prompts for unique visits using RAG
+* Test the new application with your own prompts or check out the sample prompts in the lab guide
