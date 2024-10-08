@@ -34,6 +34,9 @@ This repo provides the high level steps to create a RAG-based, Gen AI travel ass
 * Click Run
 * This will create a new **vineyard_data_single_string** table using the CONCAT function. Each multi-column record (winery or vineyard) will now be a single string (creates an "unstructured" document for each winery or vineyard)
 
+```
+
+
 ### STEP 4: Create a Databricks Personal Compute Cluster to run a notebook
 * Click in the left gray navigation
 * Click Create compute
