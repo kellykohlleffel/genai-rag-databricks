@@ -1,7 +1,7 @@
 # :wine_glass: Create a wine country travel assistant with Fivetran and Databricks
 ## Scripts and code for the Fivetran + Databricks RAG-based, Gen AI Hands on Lab (60 minutes)
 
-This repo provides the high level steps to create a RAG-based, Gen AI travel assistant using Fivetran and Databricks (detailed instructions are in the lab guide provided by your lab instructor). All required code blocks are included. This repo is the "easy button" to copy/paste each code block. If you have any issues with copy/paste, you can download the code [here](https://github.com/kellykohlleffel/genai-rag-snowflake/archive/refs/heads/main.zip).
+This repo provides the high level steps to create a RAG-based, Gen AI travel assistant using Fivetran and Databricks (detailed instructions are in the lab guide provided by your lab instructor). All required code blocks are included. This repo is the "easy button" to copy/paste each code block. If you have any issues with copy/paste, you can download the code [here](https://github.com/kellykohlleffel/genai-rag-databricks/archive/refs/heads/main.zip).
 
 ### Prerequisites and Accounts
 * **Databricks Account**: mds-databricks-aws-demo
