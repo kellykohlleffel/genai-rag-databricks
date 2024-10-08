@@ -85,11 +85,12 @@ def get_embedding(text):
    return embedding
 ```
 
-### Step 5.5 Prompt for schema prefix
+### Step 5.5 Prompt for schema prefix and Unity Catalog
 
 ```
-# Step 5.5 Prompt for schema prefix
+# Step 5.5: Prompt for schema prefix and Unity Catalog
 schema_prefix = input("Please enter the schema prefix (e.g., 'a4_rag'): ")
+unity_catalog = input("Please enter the Unity Catalog name (e.g., 'ts-mds-catalog-lab'): ")
 ```
 
 ### Step 5.6: Load your data and create the vector table in Unity Catalog
@@ -98,7 +99,7 @@ schema_prefix = input("Please enter the schema prefix (e.g., 'a4_rag'): ")
 # Step 5.6: Load your data and create the vector table in Unity Catalog
 
 # Load your vineyard data table from the new schema
-df = spark.table(f"`ts-mds-catalog-lab`.`{schema_prefix}_agriculture`.`vineyard_data_single_string`")
+df = spark.table(f"`{unity_catalog}`.`{schema_prefix}_agriculture`.`vineyard_data_single_string`")
 
 # Convert the Spark DataFrame to a Pandas DataFrame for processing
 df_pandas = df.toPandas()
@@ -110,10 +111,10 @@ df_pandas['WINERY_EMBEDDING'] = df_pandas['winery_information'].apply(lambda x: 
 df_vectors = spark.createDataFrame(df_pandas[['WINERY_OR_VINEYARD', 'winery_information', 'WINERY_EMBEDDING']])
 
 # Save the vector table in Unity Catalog in the specified schema
-df_vectors.write.format("delta").mode("overwrite").saveAsTable(f"`ts-mds-catalog-lab`.`{schema_prefix}_agriculture`.`vineyard_data_vectors`")
+df_vectors.write.format("delta").mode("overwrite").saveAsTable(f"`{unity_catalog}`.`{schema_prefix}_agriculture`.`vineyard_data_vectors`")
 
 # Check that the table is stored
-spark.sql(f"SHOW TABLES IN `ts-mds-catalog-lab`.`{schema_prefix}_agriculture`").show()
+spark.sql(f"SHOW TABLES IN `{unity_catalog}`.`{schema_prefix}_agriculture`").show()
 ```
 
 ### Step 5.7: Define context retrieval function
@@ -127,7 +128,7 @@ def get_context_from_vectors(question, top_n=3):
     # Load the vectors table
     vector_query = f"""
         SELECT winery_or_vineyard, winery_information, winery_embedding
-        FROM `ts-mds-catalog-lab`.`{schema_prefix}_agriculture`.`vineyard_data_vectors`
+        FROM `{unity_catalog}`.`{schema_prefix}_agriculture`.`vineyard_data_vectors`
     """
     vectors_df = spark.sql(vector_query).toPandas()
 
@@ -163,7 +164,7 @@ def generate_answer(question, context):
 
 # Verify that you are referencing your new tables
 # Replace 'correct_catalog_name' with the actual names you verified
-spark.sql(f"SHOW TABLES IN `ts-mds-catalog-lab`.`{schema_prefix}_agriculture`").show()
+spark.sql(f"SHOW TABLES IN `{unity_catalog}`.`{schema_prefix}_agriculture`").show()
 ```
 
 ### Step 5.9: Generate a Databricks Access Token
@@ -286,7 +287,7 @@ def get_context_from_vectors_with_preferences(wine_varietal, price_range, experi
     # Step 1: Retrieve the embeddings of all wineries from the Unity Catalog vector table
     vector_query = f"""
         SELECT winery_or_vineyard, winery_information, winery_embedding
-        FROM `ts-mds-catalog-lab`.`{schema_prefix}_agriculture`.`vineyard_data_vectors`
+        FROM `{unity_catalog}`.`{schema_prefix}_agriculture`.`vineyard_data_vectors`
     """
     vectors_df = spark.sql(vector_query).toPandas()
 
@@ -332,7 +333,7 @@ def get_recommendations_based_on_varietals(winery_names, top_n=3):
     # Get varietals of the last discussed wineries
     last_winery_varietal_query = f"""
         SELECT winery_or_vineyard, winery_information
-        FROM `ts-mds-catalog-lab`.`{schema_prefix}_agriculture`.`vineyard_data_single_string`
+        FROM `{unity_catalog}`.`{schema_prefix}_agriculture`.`vineyard_data_single_string`
         WHERE winery_or_vineyard IN ({', '.join([f"'{winery}'" for winery in winery_names])})
     """
     varietals_df = spark.sql(last_winery_varietal_query).toPandas()
@@ -355,7 +356,7 @@ def get_recommendations_based_on_varietals(winery_names, top_n=3):
     # Fetch recommendations based on varietals
     recommendation_query = f"""
         SELECT winery_or_vineyard, winery_information
-        FROM `ts-mds-catalog-lab`.`{schema_prefix}_agriculture`.`vineyard_data_single_string`
+        FROM `{unity_catalog}`.`{schema_prefix}_agriculture`.`vineyard_data_single_string`
         WHERE winery_information LIKE '%{unique_varietals[0]}%' 
            OR winery_information LIKE '%{unique_varietals[1]}%' 
            OR winery_information LIKE '%{unique_varietals[2]}%'
