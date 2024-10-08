@@ -201,7 +201,7 @@ DATABRICKS_TOKEN = "your_databricks_token"
 # Initialize the OpenAI-like Databricks client
 client = OpenAI(
     api_key=DATABRICKS_TOKEN,
-    base_url="https://adb-3043026989721781.1.azuredatabricks.net/serving-endpoints"
+    base_url="https://dbc-dfd1c87b-4112.cloud.databricks.com/serving-endpoints"
 )
 
 # Load the Hugging Face model and tokenizer for sentence embeddings
