@@ -27,7 +27,7 @@ This repo provides the high level steps to create a RAG-based, Gen AI travel ass
 * Click on **Sample Data** to take a look
 
 ### STEP 3: Transform the new structured dataset into a single string to simulate an unstructured document
-* Open a new tab in the Databricks SQL Editor and create a new query
+* Open a new query in the Databricks SQL Editor
 * Select the catalog: ts-mds-catalog-lab
 * Select your schema: yourlastname_yourfirstname_agriculture 
 * Copy and paste this transformation script into the SQL Editor: [**transformation scripts**](01-transformations.sql)
