@@ -9,6 +9,11 @@ This repo provides the high level steps to create a RAG-based, Gen AI travel ass
 * **Fivetran Account**: MDS_DATABRICKS_HOL
 * **Fivetran Destination**: DATABRICKS_LAB
 
+### STEP 0: Create a Databricks Personal Compute Cluster to run a notebook
+* Click in the left gray navigation
+* Click Create compute
+* Create a personal compute cluster that uses the following Databricks runtime 15.4 LTS ML
+
 ### STEP 1: Create a Fivetran connector to Databricks
 
 * **Source**: Google Cloud PostgreSQL (G1 instance)
@@ -71,24 +76,19 @@ CREATE OR REPLACE TABLE vineyard_data_single_string AS
 SELECT * FROM vineyard_data_single_string;
 ```
 
-### STEP 4: Create a Databricks Personal Compute Cluster to run a notebook
-* Click in the left gray navigation
-* Click Create compute
-* Create a personal compute cluster than uses the following Databricks runtime 15.4 LTS ML
+### STEP 4: Start a Databricks notebook environment to transform the vineyard_data_single_string table to a vector table and create the Gen AI application
 
-### STEP 5: Start a Databricks notebook environment to transform the vineyard_data_single_string table to a vector table and create the Gen AI application
-
-### Step 5.1: Install the required libraries
+### Step 4.1: Install the required libraries
 
 ```
-# Step 5.1: Install the required libraries
+# Step 4.1: Install the required libraries
 %pip install transformers torch scipy 
 ```
 
-### Step 5.2: Import required libraries
+### Step 4.2: Import required libraries
 
 ```
-# Step 5.2: Import required libraries
+# Step 4.2: Import required libraries
 from transformers import AutoTokenizer, AutoModel
 import torch
 import numpy as np
@@ -99,10 +99,10 @@ from pyspark.sql.functions import udf
 from pyspark.sql.types import ArrayType, FloatType
 ```
 
-### Step 5.3: Load Hugging Face Model and Tokenizer
+### Step 4.3: Load Hugging Face Model and Tokenizer
 
 ```
-# Step 5.3: Load Hugging Face Model and Tokenizer
+# Step 4.3: Load Hugging Face Model and Tokenizer
 # Update your Hugging Face token and authenticate
 huggingface_token = "your_hugging_face_token"  # Replace with your Hugging Face token
 
@@ -111,10 +111,10 @@ tokenizer = AutoTokenizer.from_pretrained("sentence-transformers/all-MiniLM-L6-v
 model = AutoModel.from_pretrained("sentence-transformers/all-MiniLM-L6-v2", use_auth_token=huggingface_token)
 ```
 
-### Step 5.4: Define a function to generate embeddings
+### Step 4.4: Define a function to generate embeddings
 
 ```
-# Step 5.4: Define a function to generate embeddings
+# Step 4.4: Define a function to generate embeddings
 def get_embedding(text):
    inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True)
    outputs = model(**inputs)
@@ -122,18 +122,18 @@ def get_embedding(text):
    return embedding
 ```
 
-### Step 5.5 Prompt for schema prefix and Unity Catalog
+### Step 4.5 Prompt for schema prefix and Unity Catalog
 
 ```
-# Step 5.5: Prompt for schema prefix and Unity Catalog
+# Step 4.5: Prompt for schema prefix and Unity Catalog
 schema_prefix = input("Please enter the schema prefix (e.g., 'a4_rag'): ")
 unity_catalog = input("Please enter the Unity Catalog name (e.g., 'ts-mds-catalog-lab'): ")
 ```
 
-### Step 5.6: Load your data and create the vector table in Unity Catalog
+### Step 4.6: Load your data and create the vector table in Unity Catalog
 
 ```
-# Step 5.6: Load your data and create the vector table in Unity Catalog
+# Step 4.6: Load your data and create the vector table in Unity Catalog
 
 # Load your vineyard data table from the new schema
 df = spark.table(f"`{unity_catalog}`.`{schema_prefix}_agriculture`.`vineyard_data_single_string`")
@@ -154,10 +154,10 @@ df_vectors.write.format("delta").mode("overwrite").saveAsTable(f"`{unity_catalog
 spark.sql(f"SHOW TABLES IN `{unity_catalog}`.`{schema_prefix}_agriculture`").show()
 ```
 
-### Step 5.7: Define context retrieval function
+### Step 4.7: Define context retrieval function
 
 ```
-# Step 5.7: Define context retrieval function
+# Step 4.7: Define context retrieval function
 def get_context_from_vectors(question, top_n=3):
     # Embed the question
     question_embedding = generate_question_embedding(question)
@@ -187,10 +187,10 @@ def get_context_from_vectors(question, top_n=3):
     return combined_context, winery_names  # Ensure two values are always returned
 ```
 
-### Step 5.8: Define answer generation function
+### Step 4.8: Define answer generation function
 
 ```
-# Step 5.8: Define answer generation function
+# Step 4.8: Define answer generation function
 def generate_answer(question, context):
    # For now, let's simply concatenate the context with the question as a basic example
    if not context:
@@ -204,10 +204,10 @@ def generate_answer(question, context):
 spark.sql(f"SHOW TABLES IN `{unity_catalog}`.`{schema_prefix}_agriculture`").show()
 ```
 
-### Step 5.9: Generate a Databricks Access Token
+### Step 4.9: Generate a Databricks Access Token
 
 ```
-# Step 5.9: Generate a Databricks Access Token
+# Step 4.9: Generate a Databricks Access Token
     # Click on your profile icon in the upper right corner
     # Click on Settings
     # Click on Developer
@@ -216,10 +216,10 @@ spark.sql(f"SHOW TABLES IN `{unity_catalog}`.`{schema_prefix}_agriculture`").sho
     # Add that access token to Step 5.9 line 16
 ```
 
-### Step 5.10: Create an interactive wine country assistant chatbot with rich text formatting, interactive follow-up, token metrics, model selection, reset functionality, winery rating, Open Prompt & Experience-Based Prompt modes, dynamic user preferences, continuous session flow with reset, user interaction history for recommendations, and persistent engagement without exit
+### Step 4.10: Create an interactive wine country assistant chatbot with rich text formatting, interactive follow-up, token metrics, model selection, reset functionality, winery rating, Open Prompt & Experience-Based Prompt modes, dynamic user preferences, continuous session flow with reset, user interaction history for recommendations, and persistent engagement without exit
 
 ```
-# Step 5.10: Create an interactive wine country assistant chatbot with rich text formatting, interactive follow-up, token metrics, model selection,
+# Step 4.10: Create an interactive wine country assistant chatbot with rich text formatting, interactive follow-up, token metrics, model selection,
 # reset functionality, winery rating, Open Prompt & Experience-Based Prompt modes, dynamic user preferences, continuous session flow
 # with reset, user interaction history for recommendations, and persistent engagement without exit
 
@@ -733,5 +733,6 @@ def select_experience_type():
 run_chatbot()
 ```
 
-### Step 6: Have some fun checking out the travel assistant features and creating prompts for unique visits using RAG
+### Step 5: Have some fun checking out the travel assistant features and creating prompts for unique visits using RAG
 * Test the new application with your own prompts or check out the sample prompts in the lab guide
+* Control records in the postgresql database (for testing RAG) include: kohlleffel vineyards, millman estate, hrncir family cellars, tony kelly pamont vineyards, and kai lee family cellars
