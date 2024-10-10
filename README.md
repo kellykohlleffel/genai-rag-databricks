@@ -738,3 +738,7 @@ run_chatbot()
 ### Step 5: Have some fun checking out the travel assistant features and creating prompts for unique visits using RAG
 * Test the new application with your own prompts or check out the sample prompts in the lab guide
 * Control records in the postgresql database (for testing RAG) include: kohlleffel vineyards, millman estate, hrncir family cellars, tony kelly pamont vineyards, and kai lee family cellars
+
+![Wine Country Visit Assistant Notebook Screenshot](images/2024-10-10%20Databricks%20Notebook%20-%20Travel%20Assistant.png)
+
+-----
