@@ -101,6 +101,8 @@ from pyspark.sql.types import ArrayType, FloatType
 
 ### Step 4.3: Load Hugging Face Model and Tokenizer
 
+> IMPORTANT: You can generate a Hugging Face token here: https://huggingface.co/settings/tokens (you'll need to create a Hugging Face account - it's free)
+
 ```
 # Step 4.3: Load Hugging Face Model and Tokenizer
 # Update your Hugging Face token and authenticate
@@ -213,7 +215,7 @@ spark.sql(f"SHOW TABLES IN `{unity_catalog}`.`{schema_prefix}_agriculture`").sho
     # Click on Developer
     # Click on Access Tokens - Manage
     # Click on Generate new token, give it a unique name, and set it for 90 days
-    # Add that access token to Step 5.9 line 16
+    # Add that access token to Step 4.10 line 16
 ```
 
 ### Step 4.10: Create an interactive wine country assistant chatbot with rich text formatting, interactive follow-up, token metrics, model selection, reset functionality, winery rating, Open Prompt & Experience-Based Prompt modes, dynamic user preferences, continuous session flow with reset, user interaction history for recommendations, and persistent engagement without exit
