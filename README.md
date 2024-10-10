@@ -9,7 +9,7 @@ This repo provides the high level steps to create a RAG-based, Gen AI travel ass
 * **Fivetran Account**: MDS_DATABRICKS_HOL
 * **Fivetran Destination**: DATABRICKS_LAB
 
-### STEP 0: Create a Databricks Personal Compute Cluster to run a notebook
+> ### IMPORTANT - STEP 0: Create a Databricks Personal Compute Cluster to run a notebook
 * Click in the left gray navigation
 * Click Create compute
 * Create a personal compute cluster that uses the following Databricks runtime 15.4 LTS ML
