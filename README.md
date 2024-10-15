@@ -220,6 +220,8 @@ spark.sql(f"SHOW TABLES IN `{unity_catalog}`.`{schema_prefix}_agriculture`").sho
 
 ### Step 4.10: Create an interactive wine country assistant chatbot with rich text formatting, interactive follow-up, token metrics, model selection, reset functionality, winery rating, Open Prompt & Experience-Based Prompt modes, dynamic user preferences, continuous session flow with reset, user interaction history for recommendations, and persistent engagement without exit
 
+> ## IMPORTANT - Before running, update below with your Databricks Token
+
 ```
 # Step 4.10: Create an interactive wine country assistant chatbot with rich text formatting, interactive follow-up, token metrics, model selection,
 # reset functionality, winery rating, Open Prompt & Experience-Based Prompt modes, dynamic user preferences, continuous session flow
