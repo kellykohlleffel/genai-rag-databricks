@@ -101,7 +101,7 @@ from pyspark.sql.types import ArrayType, FloatType
 
 ### Step 4.3: Load Hugging Face Model and Tokenizer
 
-> IMPORTANT: You can generate a Hugging Face token here: https://huggingface.co/settings/tokens (you'll need to create a Hugging Face account - it's free)
+> ## IMPORTANT: You can generate a Hugging Face token here: https://huggingface.co/settings/tokens (you'll need to create a Hugging Face account - it's free). Then update below with your Hugging Face Token.
 
 ```
 # Step 4.3: Load Hugging Face Model and Tokenizer
