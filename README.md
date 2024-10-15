@@ -81,6 +81,7 @@ SELECT * FROM vineyard_data_single_string;
 ### Step 4.1: Install the required libraries
 
 ```
+#@title Step 4.1: Install the required libraries
 # Step 4.1: Install the required libraries
 %pip install transformers torch scipy 
 ```
