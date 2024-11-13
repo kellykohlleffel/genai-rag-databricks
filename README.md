@@ -156,6 +156,46 @@ df_vectors.write.format("delta").mode("overwrite").saveAsTable(f"`{unity_catalog
 spark.sql(f"SHOW TABLES IN `{unity_catalog}`.`{schema_prefix}_agriculture`").show()
 ```
 
+### Step 4.6 ALTERNATIVE: Load your data and create the vector table in Unity Catalog with updated columns
+
+```
+# Step 4.6: Load your data and create the vector table in Unity Catalog with updated columns
+
+# Load your vineyard data table from the new schema
+df = spark.table(f"`{unity_catalog}`.`{schema_prefix}_agriculture`.`vineyard_data_single_string`")
+
+# Convert the Spark DataFrame to a Pandas DataFrame for processing
+df_pandas = df.toPandas()
+
+# Generate embeddings for the 'winery_information' field
+# The embeddings will be stored in a new column 'values'
+df_pandas['values'] = df_pandas['winery_information'].apply(lambda x: get_embedding(x))
+
+# Select and rename columns as per the new requirements:
+# - Rename 'WINERY_OR_VINEYARD' to 'id'
+# - Include 'metadata' as is
+# - Exclude 'winery_information'
+df_pandas = df_pandas.rename(columns={'WINERY_OR_VINEYARD': 'id'})
+df_vectors = df_pandas[['id', 'metadata', 'values']]
+
+# Convert back to Spark DataFrame with selected columns only
+df_vectors_spark = spark.createDataFrame(df_vectors)
+
+# Save the vector table in Unity Catalog in the specified schema
+df_vectors_spark.write.format("delta").mode("overwrite").saveAsTable(f"`{unity_catalog}`.`{schema_prefix}_agriculture`.`vineyard_data_vectors`")
+
+# Verify that the table has been created successfully
+spark.sql(f"SHOW TABLES IN `{unity_catalog}`.`{schema_prefix}_agriculture`").show()
+
+# Verification query: Display the three columns for a single record with id 'Kohlleffel Vineyards'
+display(spark.sql(f"""
+SELECT id, metadata, values
+FROM `{unity_catalog}`.`{schema_prefix}_agriculture`.`vineyard_data_vectors`
+WHERE id = 'Kohlleffel Vineyards'
+LIMIT 1
+"""))
+```
+
 ### Step 4.7: Define context retrieval function
 
 ```
